@@ -9,7 +9,7 @@ This module requires a tag:key and tag:value to query aws ec2 instances and appl
 
 Example:
 ```bash
-module "start_jenkins" {
+module "stop_jenkins" {
   source = "git::https://github.com/wcampos/terraform_aws_module_ec2_start_stop_scheduled_trigger.git"
 
   region         = "us-east-1"
