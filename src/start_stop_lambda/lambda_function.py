@@ -25,5 +25,5 @@ def lambda_handler(event, context):
         client.stop_instances(InstanceIds=instances_ids)
         print('stopped your instances: ' + str(instances_ids))
     else:
-        print('option is now valid! Select another state')
+        print('option is not valid! Select another state')
 
