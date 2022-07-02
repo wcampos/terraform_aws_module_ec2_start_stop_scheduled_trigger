@@ -43,6 +43,7 @@ resource "aws_iam_policy" "start_stop_lambda" {
       {
         "Effect" : "Allow",
         "Action" : [
+          "ec2:Describe*",
           "ec2:Start*",
           "ec2:Stop*"
         ],

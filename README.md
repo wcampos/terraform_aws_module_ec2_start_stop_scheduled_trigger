@@ -13,6 +13,7 @@ module "stop_jenkins" {
   source = "git::https://github.com/wcampos/terraform_aws_module_ec2_start_stop_scheduled_trigger.git"
 
   region         = "us-east-1"
+  prefix         = "test"
   tag_key        = "Name"
   tag_value      = "MyMachineName"
   instance_state = "Stop"
