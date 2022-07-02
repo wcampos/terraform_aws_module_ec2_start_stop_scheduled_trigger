@@ -5,6 +5,22 @@ This module requires a tag:key and tag:value to query aws ec2 instances and appl
 
 **Scheduled events are managed by a Cron, the format can be found: https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html**
 
+## How to use
+
+Example:
+```bash
+module "start_jenkins" {
+  source = "git::https://github.com/wcampos/terraform_aws_module_ec2_start_stop_scheduled_trigger.git"
+
+  region         = "us-east-1"
+  tag_key        = "Name"
+  tag_value      = "MyMachineName"
+  instance_state = "Stop"
+  cron_schedule  = "cron(0 12 * * ? *)"
+
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
