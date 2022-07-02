@@ -1,5 +1,5 @@
 resource "aws_iam_role" "start_stop_lambda" {
-  name = "ec2-${var.region}-${var.instance_state}-lambda-role"
+  name = "ec2-${var.prefix}-${var.region}-${var.instance_state}-lambda-role"
 
   assume_role_policy = <<EOF
 {
@@ -25,7 +25,7 @@ data "archive_file" "start_stop_lambda" {
 }
 
 resource "aws_iam_policy" "start_stop_lambda" {
-  name        = "ec2-${var.region}-${var.instance_state}-lambda-policy"
+  name        = "ec2-${var.prefix}-${var.region}-${var.instance_state}-lambda-policy"
   path        = "/"
   description = "Lambda Policy to Start or Stop Ec2 Instances"
   policy = jsonencode({
@@ -57,10 +57,10 @@ resource "aws_iam_role_policy_attachment" "start_stop_lambda_policy_attachment" 
 }
 
 resource "aws_lambda_function" "start_stop_lambda" {
-  function_name    = "ec2-${var.region}-${var.instance_state}-lambda"
+  function_name    = "ec2-${var.prefix}-${var.region}-${var.instance_state}-lambda"
   description      = "${var.instance_state} instances with Tag:Name ${var.tag_key} and Tag:Value ${var.tag_value}"
   role             = aws_iam_role.start_stop_lambda.arn
-  handler          = "lambda_handler"
+  handler          = "lambda_function.lambda_handler"
   runtime          = "python3.9"
   timeout          = 300
   filename         = data.archive_file.start_stop_lambda.output_path
@@ -76,7 +76,7 @@ resource "aws_lambda_function" "start_stop_lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "start_stop_lambda_cw_event_rule" {
-  name                = "ec2-${var.region}-${var.instance_state}-lambda-cw-event"
+  name                = "ec2-${var.prefix}-${var.region}-${var.instance_state}-lambda-cw-event"
   description         = "Schedule to ${var.instance_state} ec2 instances"
   schedule_expression = var.cron_schedule
 }

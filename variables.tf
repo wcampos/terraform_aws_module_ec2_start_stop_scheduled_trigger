@@ -5,6 +5,12 @@ variable "region" {
   description = "EC2 Instances Region"
 }
 
+variable "prefix" {
+  type = string
+  default = ""
+  description = "Prefix will be append to elements name"
+}
+
 variable "tag_key" {
   type        = string
   default     = ""
