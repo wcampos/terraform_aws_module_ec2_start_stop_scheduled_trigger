@@ -3,16 +3,15 @@ name: "Terraform"
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -38,11 +37,10 @@ jobs:
   release:
     name: "Release"
     needs: terraform
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
