@@ -1,4 +1,3 @@
-
 variable "region" {
   type        = string
   default     = ""
@@ -33,4 +32,16 @@ variable "cron_schedule" {
   type        = string
   default     = "cron(0 12 * * ? *)"
   description = "Cron Expression to Start or Stop EC2s. Format for cron cron(0 12 * * ? *)"
+}
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
+
+variable "environment" {
+  description = "Environment name for the resources"
+  type        = string
+  default     = "prod"
 }

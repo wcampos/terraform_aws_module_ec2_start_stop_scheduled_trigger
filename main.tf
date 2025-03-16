@@ -1,3 +1,14 @@
+locals {
+  default_tags = merge(
+    var.tags,
+    {
+      Environment = var.environment
+      Terraform   = "true"
+      Module      = "ec2-start-stop-scheduled"
+    }
+  )
+}
+
 resource "aws_iam_role" "start_stop_lambda" {
   name = "ec2-${var.prefix}-${var.region}-${var.instance_state}-lambda-role"
 
@@ -16,6 +27,8 @@ resource "aws_iam_role" "start_stop_lambda" {
   ]
 }
 EOF
+
+  tags = local.default_tags
 }
 
 data "archive_file" "start_stop_lambda" {
@@ -66,6 +79,7 @@ resource "aws_lambda_function" "start_stop_lambda" {
   timeout          = 300
   filename         = data.archive_file.start_stop_lambda.output_path
   source_code_hash = data.archive_file.start_stop_lambda.output_base64sha256
+  
   environment {
     variables = {
       "TAG_KEY"     = var.tag_key
@@ -74,12 +88,16 @@ resource "aws_lambda_function" "start_stop_lambda" {
       "INST_REGION" = var.region
     }
   }
+
+  tags = local.default_tags
 }
 
 resource "aws_cloudwatch_event_rule" "start_stop_lambda_cw_event_rule" {
   name                = "ec2-${var.prefix}-${var.region}-${var.instance_state}-lambda-cw-event"
   description         = "Schedule to ${var.instance_state} ec2 instances"
   schedule_expression = var.cron_schedule
+  
+  tags = local.default_tags
 }
 
 resource "aws_cloudwatch_event_target" "start_stop_lambda" {
